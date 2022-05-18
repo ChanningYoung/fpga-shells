@@ -1,12 +1,13 @@
 package ictfreedom.device
 
 import Chisel.Module
+import chisel3.fromIntToLiteral
 import chisel3.core._
 import freechips.rocketchip.amba.axi4._
 import freechips.rocketchip.config.Parameters
 import freechips.rocketchip.diplomacy.{AddressSet, BufferParams, LazyModule, LazyModuleImp, SimpleBus, TransferSizes}
 import freechips.rocketchip.regmapper._
-import freechips.rocketchip.subsystem.{BaseSubsystem, ExtBus, SimAXIMem}
+import freechips.rocketchip.subsystem.{BaseSubsystem, ExtBus}
 import freechips.rocketchip.tilelink._
 import freechips.rocketchip.util._
 

@@ -40,8 +40,8 @@ trait CanHaveZynqMasterAXI4MemPort { this: BaseSubsystem =>
           resources     = device.reg,
           regionType    = RegionType.UNCACHED, // cacheable
           executable    = true,
-          supportsWrite = TransferSizes(1, cacheBlockBytes),
-          supportsRead  = TransferSizes(1, cacheBlockBytes),
+          supportsWrite = TransferSizes(1, mbus.blockBytes),
+          supportsRead  = TransferSizes(1, mbus.blockBytes),
           interleavedId = Some(0))), // slave does not interleave read responses
         beatBytes = params.beatBytes)
     }))

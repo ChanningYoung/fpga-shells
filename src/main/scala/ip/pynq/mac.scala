@@ -5,7 +5,7 @@ import chisel3.core.Input
 import freechips.rocketchip.amba.axi4._
 import freechips.rocketchip.config.Parameters
 import freechips.rocketchip.diplomacy._
-import freechips.rocketchip.subsystem.{BaseSubsystem, ExtBus, SimAXIMem}
+import freechips.rocketchip.subsystem.{BaseSubsystem, ExtBus}
 import freechips.rocketchip.tilelink.TLToAXI4
 import freechips.rocketchip.util._
 import freechips.rocketchip.interrupts._
@@ -24,8 +24,8 @@ trait HasMAC { this: BaseSubsystem with HasSLCRPort =>
       val int = describeInterrupts(resources)      // interrupt description
       val clocks = describeClocks(resources)
       val compat = optDef("compatible", Seq("cdns,zynq-gem", "cdns,gem").map(ResourceString(_))) // describe the list of compatiable devices
-      val reg = resources.map.filterKeys(regFilter)
-      val (named, bulk) = reg.partition { case (k, v) => regName(k).isDefined }
+      val reg = resources.map.filterKeys(DiplomacyUtils.regFilter)
+      val (named, bulk) = reg.partition { case (k, v) => DiplomacyUtils.regName(k).isDefined }
       // We need to be sure that each named reg has exactly one AddressRange associated to it
       named.foreach {
         case (k, Seq(Binding(_, value: ResourceAddress))) =>
@@ -34,7 +34,7 @@ trait HasMAC { this: BaseSubsystem with HasSLCRPort =>
         case (k, seq) =>
           require (false, s"DTS device $name has $k = $seq, must be a single ResourceAddress!")
       }
-      val names = optDef("reg-names", named.map(x => ResourceString(regName(x._1).get)).toList) // names of the named address space
+      val names = optDef("reg-names", named.map(x => ResourceString(DiplomacyUtils.regName(x._1).get)).toList) // names of the named address space
       val regs = optDef("reg", (named ++ bulk).flatMap(_._2.map(_.value)).toList) // address ranges of all spaces (named and bulk)
       val status = optDef("status", Seq("okay").map(ResourceString(_)))
       val extra = Map(
